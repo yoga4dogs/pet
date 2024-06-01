@@ -31,6 +31,11 @@ root.wm_attributes('-transparentcolor','black')
 root.wm_attributes('-topmost', True)
 
 #call buddy's action .gif to an array
+idle = []
+idle.append(tk.PhotoImage(file=image_path+'yellowman\\idle.gif',format = 'gif -index 0'))
+idle.append(tk.PhotoImage(file=image_path+'yellowman\\idle.gif',format = 'gif -index 1'))
+idle.append(tk.PhotoImage(file=image_path+'yellowman\\idle.gif',format = 'gif -index 2'))
+idle.append(tk.PhotoImage(file=image_path+'yellowman\\idle.gif',format = 'gif -index 3'))
 walkL = []
 walkL.append(tk.PhotoImage(file=image_path+'yellowman\\walkL.gif',format = 'gif -index 0'))
 walkL.append(tk.PhotoImage(file=image_path+'yellowman\\walkL.gif',format = 'gif -index 1'))
@@ -63,15 +68,19 @@ def update(count, yellowman):
         else:
             frame = walkL[count]
             
-
-        if yellowman.x + (yellowman.speed * yellowman.facing) > screen_size[0]-sprite_size:
-            yellowman.x = screen_size[0]-sprite_size
-            yellowman.facing *= -1
-        elif yellowman.x + (yellowman.speed * yellowman.facing) < 0:
-            yellowman.x = 0
-            yellowman.facing *= -1
+        if random.randint(1,100) == 1:
+            yellowman.facing = 1-random.randint(0,1)*2
+            yellowman.state = 'idle'
         else:
-            yellowman.x += yellowman.speed * yellowman.facing
+
+            if yellowman.x + (yellowman.speed * yellowman.facing) > screen_size[0]-sprite_size:
+                yellowman.x = screen_size[0]-sprite_size
+                yellowman.facing *= -1
+            elif yellowman.x + (yellowman.speed * yellowman.facing) < 0:
+                yellowman.x = 0
+                yellowman.facing *= -1
+            else:
+                yellowman.x += yellowman.speed * yellowman.facing
 
     elif yellowman.state == 'held':
         if yellowman.facing > 0:
@@ -86,16 +95,26 @@ def update(count, yellowman):
             frame = fallL[count]
         if yellowman.y + yellowman.speed * 2 > bottom_bounds:
             yellowman.y = bottom_bounds
-            yellowman.state = 'walk'
+            yellowman.state = 'idle'
         else:
             yellowman.y += yellowman.speed * 2
+    elif yellowman.state == 'idle':
+        frame = idle[count]
+        if random.randint(1,20) == 1:
+            yellowman.state = 'walk'
+
+    if yellowman.y > bottom_bounds:
+        yellowman.y = bottom_bounds
 
     label.configure(image=frame)
     root.geometry('128x128+'+str(yellowman.x)+'+'+str(yellowman.y))
     root.after(125,update, count, yellowman)
 
-def set_fall(event):
-    yellowman.state = 'fall'
+def click_handler(event):
+    if yellowman.y + yellowman.speed * 2 < bottom_bounds:
+        yellowman.state = 'fall'
+    else:
+        yellowman.state = 'idle'
 
 def drag_handler(event):
     yellowman.state = 'held'
@@ -114,7 +133,7 @@ label.configure(image=walkR[0])
 label.pack()
 
 label.bind("<B1-Motion>", drag_handler)
-label.bind("<ButtonRelease>", set_fall)
+label.bind("<ButtonRelease>", click_handler)
 root.geometry('128x128+'+str(yellowman.x)+'+'+str(yellowman.y))
 root.after(1,update, count, yellowman)
 root.mainloop()
