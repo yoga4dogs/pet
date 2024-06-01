@@ -146,9 +146,6 @@ def click_handler(event):
     if yellowman.state == 'held':
         frame_count = 0
         yellowman.state = 'fall'
-    # elif yellowman.state == 'walk':
-    #     frame_count = 0
-    #     yellowman.state = 'flip'
 
 def drag_handler(event):
     frame_count = 0
@@ -162,13 +159,11 @@ def drag_handler(event):
 
 # init set label
 label = tk.Label(root,bd=0,bg='black')
-label.configure(image=walkR[0])
 label.pack()
 
 # set controls
 label.bind("<B1-Motion>", drag_handler)
 label.bind("<ButtonRelease>", click_handler)
 
-root.geometry('128x128+'+str(yellowman.x)+'+'+str(yellowman.y))
 root.after(loop_interval,update, frame_count, yellowman)
 root.mainloop()
