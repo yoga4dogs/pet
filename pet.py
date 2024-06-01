@@ -10,29 +10,32 @@ screen_size = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
 taskbar_size = 48
 bottom_bounds = screen_size[1]-sprite_size-taskbar_size
 
-count = 0
+frame_count = 0
+loop_interval = 125
 
 class new_yellowman:
     def __init__(self):
         self.x = random.randrange(0, screen_size[0]-sprite_size)
-    state = 'walk'
+    state = 'idle'
     facing = 1
     speed = 20
     y = bottom_bounds
-
 yellowman = new_yellowman()
 
+# set window transparency
 root = tk.Tk()
 root.config(highlightbackground='black')
 root.overrideredirect(True)
 root.wm_attributes('-transparentcolor','black')
 root.wm_attributes('-topmost', True)
 
+# idle
 idle = []
 idle.append(tk.PhotoImage(file=image_path+'yellowman\\idle.gif',format = 'gif -index 0'))
 idle.append(tk.PhotoImage(file=image_path+'yellowman\\idle.gif',format = 'gif -index 1'))
 idle.append(tk.PhotoImage(file=image_path+'yellowman\\idle.gif',format = 'gif -index 2'))
 idle.append(tk.PhotoImage(file=image_path+'yellowman\\idle.gif',format = 'gif -index 3'))
+# walk
 walkL = []
 walkL.append(tk.PhotoImage(file=image_path+'yellowman\\walkL.gif',format = 'gif -index 0'))
 walkL.append(tk.PhotoImage(file=image_path+'yellowman\\walkL.gif',format = 'gif -index 1'))
@@ -43,6 +46,7 @@ walkR.append(tk.PhotoImage(file=image_path+'yellowman\\walkR.gif',format = 'gif 
 walkR.append(tk.PhotoImage(file=image_path+'yellowman\\walkR.gif',format = 'gif -index 1'))
 walkR.append(tk.PhotoImage(file=image_path+'yellowman\\walkR.gif',format = 'gif -index 2'))
 walkR.append(tk.PhotoImage(file=image_path+'yellowman\\walkR.gif',format = 'gif -index 3'))
+# flip
 fallL = []
 fallL.append(tk.PhotoImage(file=image_path+'yellowman\\fallL.gif',format = 'gif -index 0'))
 fallL.append(tk.PhotoImage(file=image_path+'yellowman\\fallL.gif',format = 'gif -index 1'))
@@ -53,6 +57,7 @@ fallR.append(tk.PhotoImage(file=image_path+'yellowman\\fallR.gif',format = 'gif 
 fallR.append(tk.PhotoImage(file=image_path+'yellowman\\fallR.gif',format = 'gif -index 1'))
 fallR.append(tk.PhotoImage(file=image_path+'yellowman\\fallR.gif',format = 'gif -index 2'))
 fallR.append(tk.PhotoImage(file=image_path+'yellowman\\fallR.gif',format = 'gif -index 3'))
+# flip
 flipL = []
 flipL.append(tk.PhotoImage(file=image_path+'yellowman\\flipL.gif',format = 'gif -index 0'))
 flipL.append(tk.PhotoImage(file=image_path+'yellowman\\flipL.gif',format = 'gif -index 1'))
@@ -64,64 +69,63 @@ flipR.append(tk.PhotoImage(file=image_path+'yellowman\\flipR.gif',format = 'gif 
 flipR.append(tk.PhotoImage(file=image_path+'yellowman\\flipR.gif',format = 'gif -index 2'))
 flipR.append(tk.PhotoImage(file=image_path+'yellowman\\flipR.gif',format = 'gif -index 3'))
 
-def update(count, yellowman):
-    if count < 3:
-        count += 1
+def update(frame_count, yellowman):
+    if frame_count < 3:
+        frame_count += 1
     else:
-        count = 0
-    if yellowman.state == 'walk':
+        frame_count = 0
+    if yellowman.state == 'idle':
+        frame = idle[frame_count]
+        if random.randint(1,20) == 1:
+            yellowman.state = 'walk'
+            frame_count = 0
+    elif yellowman.state == 'walk':
         if yellowman.facing > 0:
-            frame = walkR[count]
+            frame = walkR[frame_count]
         else:
-            frame = walkL[count]
-            
+            frame = walkL[frame_count]
         if random.randint(1,100) == 1:
             yellowman.facing = 1-random.randint(0,1)*2
             yellowman.state = 'idle'
-            count = 0
+            frame_count = 0
         elif random.randint(1,50) == 1:
             yellowman.state = 'flip'
-            count = 0
+            frame_count = 0
         else:
             yellowman = move_x(yellowman)
     elif yellowman.state == 'flip':
         if yellowman.facing > 0:
-            frame = flipR[count]
+            frame = flipR[frame_count]
         else:
-            frame = flipL[count]
+            frame = flipL[frame_count]
         yellowman = move_x(yellowman)
-        if count == 3:
+        if frame_count == 3:
             yellowman.state = 'walk'
-            count = 0
+            frame_count = 0
     elif yellowman.state == 'held':
         if yellowman.facing > 0:
-            frame = fallR[count]
+            frame = fallR[frame_count]
         else:
-            frame = fallL[count]
+            frame = fallL[frame_count]
         pass
     elif yellowman.state == 'fall':
         if yellowman.facing > 0:
-            frame = flipR[count]
+            frame = flipR[frame_count]
         else:
-            frame = flipL[count]
+            frame = flipL[frame_count]
         if yellowman.y + yellowman.speed * 2 > bottom_bounds:
             yellowman.y = bottom_bounds
             yellowman.state = 'idle'
-            count = 0
+            frame_count = 0
         else:
             yellowman.y += yellowman.speed * 2
-    elif yellowman.state == 'idle':
-        frame = idle[count]
-        if random.randint(1,20) == 1:
-            yellowman.state = 'walk'
-            count = 0
 
     if yellowman.y > bottom_bounds:
         yellowman.y = bottom_bounds
 
     label.configure(image=frame)
     root.geometry('128x128+'+str(yellowman.x)+'+'+str(yellowman.y))
-    root.after(125,update, count, yellowman)
+    root.after(loop_interval,update, frame_count, yellowman)
 
 def move_x(yellowman):
     if yellowman.state == 'flip':
@@ -140,14 +144,14 @@ def move_x(yellowman):
 
 def click_handler(event):
     if yellowman.state == 'held':
-        count = 0
+        frame_count = 0
         yellowman.state = 'fall'
     # elif yellowman.state == 'walk':
-    #     count = 0
+    #     frame_count = 0
     #     yellowman.state = 'flip'
 
 def drag_handler(event):
-    count = 0
+    frame_count = 0
     yellowman.state = 'held'
     if yellowman.x < int(root.winfo_pointerx()-sprite_size/2):
         yellowman.facing = 1
@@ -156,14 +160,15 @@ def drag_handler(event):
     yellowman.x = int(root.winfo_pointerx()-sprite_size/2)
     yellowman.y = int(root.winfo_pointery()-sprite_size/4)
 
-
+# init set label
 label = tk.Label(root,bd=0,bg='black')
 label.configure(image=walkR[0])
 label.pack()
 
+# set controls
 label.bind("<B1-Motion>", drag_handler)
 label.bind("<ButtonRelease>", click_handler)
 
 root.geometry('128x128+'+str(yellowman.x)+'+'+str(yellowman.y))
-root.after(1,update, count, yellowman)
+root.after(loop_interval,update, frame_count, yellowman)
 root.mainloop()
