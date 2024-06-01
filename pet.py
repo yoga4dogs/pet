@@ -120,8 +120,6 @@ def drag_handler(event):
         yellowman.facing = 1
     else:
         yellowman.facing = -1
-    global prev_x
-    prev_x = int(root.winfo_pointerx()-sprite_size/2)
     yellowman.x = int(root.winfo_pointerx()-sprite_size/2)
     yellowman.y = int(root.winfo_pointery()-sprite_size/4)
 
