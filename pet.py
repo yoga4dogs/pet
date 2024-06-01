@@ -1,6 +1,5 @@
 import random
 import tkinter as tk
-from PIL import Image, ImageTk
 import ctypes
 
 image_path = '.\\images\\'
@@ -19,7 +18,6 @@ class new_yellowman:
     speed = 20
     y = bottom_bounds
 
-global yellowman 
 yellowman = new_yellowman()
 
 count = 0
@@ -134,6 +132,7 @@ label.pack()
 
 label.bind("<B1-Motion>", drag_handler)
 label.bind("<ButtonRelease>", click_handler)
+
 root.geometry('128x128+'+str(yellowman.x)+'+'+str(yellowman.y))
 root.after(1,update, count, yellowman)
 root.mainloop()
