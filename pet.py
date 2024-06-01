@@ -101,9 +101,9 @@ def update(count, yellowman):
         pass
     elif yellowman.state == 'fall':
         if yellowman.facing > 0:
-            frame = fallR[count]
+            frame = flipR[count]
         else:
-            frame = fallL[count]
+            frame = flipL[count]
         if yellowman.y + yellowman.speed * 2 > bottom_bounds:
             yellowman.y = bottom_bounds
             yellowman.state = 'idle'
