@@ -10,6 +10,8 @@ screen_size = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
 taskbar_size = 48
 bottom_bounds = screen_size[1]-sprite_size-taskbar_size
 
+count = 0
+
 class new_yellowman:
     def __init__(self):
         self.x = random.randrange(0, screen_size[0]-sprite_size)
@@ -20,15 +22,12 @@ class new_yellowman:
 
 yellowman = new_yellowman()
 
-count = 0
-
 root = tk.Tk()
 root.config(highlightbackground='black')
 root.overrideredirect(True)
 root.wm_attributes('-transparentcolor','black')
 root.wm_attributes('-topmost', True)
 
-#call buddy's action .gif to an array
 idle = []
 idle.append(tk.PhotoImage(file=image_path+'yellowman\\idle.gif',format = 'gif -index 0'))
 idle.append(tk.PhotoImage(file=image_path+'yellowman\\idle.gif',format = 'gif -index 1'))
@@ -70,7 +69,6 @@ def update(count, yellowman):
             yellowman.facing = 1-random.randint(0,1)*2
             yellowman.state = 'idle'
         else:
-
             if yellowman.x + (yellowman.speed * yellowman.facing) > screen_size[0]-sprite_size:
                 yellowman.x = screen_size[0]-sprite_size
                 yellowman.facing *= -1
