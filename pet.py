@@ -8,11 +8,9 @@ screen_size = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
 taskbar_size = 48
 
 image_path = '.\\images\\'
-# image_path += 'stupid_cat.png'
-# image_path += 'yellowman_walk.gif'
 sprite_size = 128
-
 facing = 1
+
 speed = 20
 count = 0
 
