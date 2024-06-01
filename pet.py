@@ -2,16 +2,16 @@ import random
 import tkinter as tk
 import ctypes
 
-image_path = '.\\images\\'
+image_path = '.\\images\\yellowman\\'
 sprite_size = 128
+frame_count = 0
+
+loop_interval = 125
 
 user32 = ctypes.windll.user32
 screen_size = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
 taskbar_size = 48
 bottom_bounds = screen_size[1]-sprite_size-taskbar_size
-
-frame_count = 0
-loop_interval = 125
 
 class new_yellowman:
     def __init__(self):
@@ -31,43 +31,43 @@ root.wm_attributes('-topmost', True)
 
 # idle
 idle = []
-idle.append(tk.PhotoImage(file=image_path+'yellowman\\idle.gif',format = 'gif -index 0'))
-idle.append(tk.PhotoImage(file=image_path+'yellowman\\idle.gif',format = 'gif -index 1'))
-idle.append(tk.PhotoImage(file=image_path+'yellowman\\idle.gif',format = 'gif -index 2'))
-idle.append(tk.PhotoImage(file=image_path+'yellowman\\idle.gif',format = 'gif -index 3'))
+idle.append(tk.PhotoImage(file=image_path+'idle.gif',format = 'gif -index 0'))
+idle.append(tk.PhotoImage(file=image_path+'idle.gif',format = 'gif -index 1'))
+idle.append(tk.PhotoImage(file=image_path+'idle.gif',format = 'gif -index 2'))
+idle.append(tk.PhotoImage(file=image_path+'idle.gif',format = 'gif -index 3'))
 # walk
 walkL = []
-walkL.append(tk.PhotoImage(file=image_path+'yellowman\\walkL.gif',format = 'gif -index 0'))
-walkL.append(tk.PhotoImage(file=image_path+'yellowman\\walkL.gif',format = 'gif -index 1'))
-walkL.append(tk.PhotoImage(file=image_path+'yellowman\\walkL.gif',format = 'gif -index 2'))
-walkL.append(tk.PhotoImage(file=image_path+'yellowman\\walkL.gif',format = 'gif -index 3'))
+walkL.append(tk.PhotoImage(file=image_path+'walkL.gif',format = 'gif -index 0'))
+walkL.append(tk.PhotoImage(file=image_path+'walkL.gif',format = 'gif -index 1'))
+walkL.append(tk.PhotoImage(file=image_path+'walkL.gif',format = 'gif -index 2'))
+walkL.append(tk.PhotoImage(file=image_path+'walkL.gif',format = 'gif -index 3'))
 walkR = []
-walkR.append(tk.PhotoImage(file=image_path+'yellowman\\walkR.gif',format = 'gif -index 0'))
-walkR.append(tk.PhotoImage(file=image_path+'yellowman\\walkR.gif',format = 'gif -index 1'))
-walkR.append(tk.PhotoImage(file=image_path+'yellowman\\walkR.gif',format = 'gif -index 2'))
-walkR.append(tk.PhotoImage(file=image_path+'yellowman\\walkR.gif',format = 'gif -index 3'))
+walkR.append(tk.PhotoImage(file=image_path+'walkR.gif',format = 'gif -index 0'))
+walkR.append(tk.PhotoImage(file=image_path+'walkR.gif',format = 'gif -index 1'))
+walkR.append(tk.PhotoImage(file=image_path+'walkR.gif',format = 'gif -index 2'))
+walkR.append(tk.PhotoImage(file=image_path+'walkR.gif',format = 'gif -index 3'))
 # flip
 fallL = []
-fallL.append(tk.PhotoImage(file=image_path+'yellowman\\fallL.gif',format = 'gif -index 0'))
-fallL.append(tk.PhotoImage(file=image_path+'yellowman\\fallL.gif',format = 'gif -index 1'))
-fallL.append(tk.PhotoImage(file=image_path+'yellowman\\fallL.gif',format = 'gif -index 2'))
-fallL.append(tk.PhotoImage(file=image_path+'yellowman\\fallL.gif',format = 'gif -index 3'))
+fallL.append(tk.PhotoImage(file=image_path+'fallL.gif',format = 'gif -index 0'))
+fallL.append(tk.PhotoImage(file=image_path+'fallL.gif',format = 'gif -index 1'))
+fallL.append(tk.PhotoImage(file=image_path+'fallL.gif',format = 'gif -index 2'))
+fallL.append(tk.PhotoImage(file=image_path+'fallL.gif',format = 'gif -index 3'))
 fallR = []
-fallR.append(tk.PhotoImage(file=image_path+'yellowman\\fallR.gif',format = 'gif -index 0'))
-fallR.append(tk.PhotoImage(file=image_path+'yellowman\\fallR.gif',format = 'gif -index 1'))
-fallR.append(tk.PhotoImage(file=image_path+'yellowman\\fallR.gif',format = 'gif -index 2'))
-fallR.append(tk.PhotoImage(file=image_path+'yellowman\\fallR.gif',format = 'gif -index 3'))
+fallR.append(tk.PhotoImage(file=image_path+'fallR.gif',format = 'gif -index 0'))
+fallR.append(tk.PhotoImage(file=image_path+'fallR.gif',format = 'gif -index 1'))
+fallR.append(tk.PhotoImage(file=image_path+'fallR.gif',format = 'gif -index 2'))
+fallR.append(tk.PhotoImage(file=image_path+'fallR.gif',format = 'gif -index 3'))
 # flip
 flipL = []
-flipL.append(tk.PhotoImage(file=image_path+'yellowman\\flipL.gif',format = 'gif -index 0'))
-flipL.append(tk.PhotoImage(file=image_path+'yellowman\\flipL.gif',format = 'gif -index 1'))
-flipL.append(tk.PhotoImage(file=image_path+'yellowman\\flipL.gif',format = 'gif -index 2'))
-flipL.append(tk.PhotoImage(file=image_path+'yellowman\\flipL.gif',format = 'gif -index 3'))
+flipL.append(tk.PhotoImage(file=image_path+'flipL.gif',format = 'gif -index 0'))
+flipL.append(tk.PhotoImage(file=image_path+'flipL.gif',format = 'gif -index 1'))
+flipL.append(tk.PhotoImage(file=image_path+'flipL.gif',format = 'gif -index 2'))
+flipL.append(tk.PhotoImage(file=image_path+'flipL.gif',format = 'gif -index 3'))
 flipR = []
-flipR.append(tk.PhotoImage(file=image_path+'yellowman\\flipR.gif',format = 'gif -index 0'))
-flipR.append(tk.PhotoImage(file=image_path+'yellowman\\flipR.gif',format = 'gif -index 1'))
-flipR.append(tk.PhotoImage(file=image_path+'yellowman\\flipR.gif',format = 'gif -index 2'))
-flipR.append(tk.PhotoImage(file=image_path+'yellowman\\flipR.gif',format = 'gif -index 3'))
+flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 0'))
+flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 1'))
+flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 2'))
+flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 3'))
 
 def update(frame_count, yellowman):
     if frame_count < 3:
