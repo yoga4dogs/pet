@@ -53,6 +53,16 @@ fallR.append(tk.PhotoImage(file=image_path+'yellowman\\fallR.gif',format = 'gif 
 fallR.append(tk.PhotoImage(file=image_path+'yellowman\\fallR.gif',format = 'gif -index 1'))
 fallR.append(tk.PhotoImage(file=image_path+'yellowman\\fallR.gif',format = 'gif -index 2'))
 fallR.append(tk.PhotoImage(file=image_path+'yellowman\\fallR.gif',format = 'gif -index 3'))
+flipL = []
+flipL.append(tk.PhotoImage(file=image_path+'yellowman\\flipL.gif',format = 'gif -index 0'))
+flipL.append(tk.PhotoImage(file=image_path+'yellowman\\flipL.gif',format = 'gif -index 1'))
+flipL.append(tk.PhotoImage(file=image_path+'yellowman\\flipL.gif',format = 'gif -index 2'))
+flipL.append(tk.PhotoImage(file=image_path+'yellowman\\flipL.gif',format = 'gif -index 3'))
+flipR = []
+flipR.append(tk.PhotoImage(file=image_path+'yellowman\\flipR.gif',format = 'gif -index 0'))
+flipR.append(tk.PhotoImage(file=image_path+'yellowman\\flipR.gif',format = 'gif -index 1'))
+flipR.append(tk.PhotoImage(file=image_path+'yellowman\\flipR.gif',format = 'gif -index 2'))
+flipR.append(tk.PhotoImage(file=image_path+'yellowman\\flipR.gif',format = 'gif -index 3'))
 
 def update(count, yellowman):
     if count < 3:
@@ -68,16 +78,21 @@ def update(count, yellowman):
         if random.randint(1,100) == 1:
             yellowman.facing = 1-random.randint(0,1)*2
             yellowman.state = 'idle'
+            count = 0
+        elif random.randint(1,50) == 1:
+            yellowman.state = 'flip'
+            count = 0
         else:
-            if yellowman.x + (yellowman.speed * yellowman.facing) > screen_size[0]-sprite_size:
-                yellowman.x = screen_size[0]-sprite_size
-                yellowman.facing *= -1
-            elif yellowman.x + (yellowman.speed * yellowman.facing) < 0:
-                yellowman.x = 0
-                yellowman.facing *= -1
-            else:
-                yellowman.x += yellowman.speed * yellowman.facing
-
+            yellowman = move_x(yellowman)
+    elif yellowman.state == 'flip':
+        if yellowman.facing > 0:
+            frame = flipR[count]
+        else:
+            frame = flipL[count]
+        yellowman = move_x(yellowman)
+        if count == 3:
+            yellowman.state = 'walk'
+            count = 0
     elif yellowman.state == 'held':
         if yellowman.facing > 0:
             frame = fallR[count]
@@ -92,12 +107,14 @@ def update(count, yellowman):
         if yellowman.y + yellowman.speed * 2 > bottom_bounds:
             yellowman.y = bottom_bounds
             yellowman.state = 'idle'
+            count = 0
         else:
             yellowman.y += yellowman.speed * 2
     elif yellowman.state == 'idle':
         frame = idle[count]
         if random.randint(1,20) == 1:
             yellowman.state = 'walk'
+            count = 0
 
     if yellowman.y > bottom_bounds:
         yellowman.y = bottom_bounds
@@ -106,13 +123,31 @@ def update(count, yellowman):
     root.geometry('128x128+'+str(yellowman.x)+'+'+str(yellowman.y))
     root.after(125,update, count, yellowman)
 
-def click_handler(event):
-    if yellowman.y + yellowman.speed * 2 < bottom_bounds:
-        yellowman.state = 'fall'
+def move_x(yellowman):
+    if yellowman.state == 'flip':
+        speed_mod = 4
     else:
-        yellowman.state = 'idle'
+        speed_mod = 1
+    if yellowman.x + (yellowman.speed * yellowman.facing) > screen_size[0]-sprite_size:
+        yellowman.x = screen_size[0]-sprite_size
+        yellowman.facing *= -1
+    elif yellowman.x + (yellowman.speed * yellowman.facing) < 0:
+        yellowman.x = 0
+        yellowman.facing *= -1
+    else:
+        yellowman.x += yellowman.speed * speed_mod * yellowman.facing
+    return yellowman
+
+def click_handler(event):
+    if yellowman.state == 'held':
+        count = 0
+        yellowman.state = 'fall'
+    # elif yellowman.state == 'walk':
+    #     count = 0
+    #     yellowman.state = 'flip'
 
 def drag_handler(event):
+    count = 0
     yellowman.state = 'held'
     if yellowman.x < int(root.winfo_pointerx()-sprite_size/2):
         yellowman.facing = 1
