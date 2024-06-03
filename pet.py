@@ -80,7 +80,7 @@ def update(frame_count, yellowman):
             select_topic(yellowman)
             yellowman.state = 'talk'
             frame_count = 0
-        elif random.randint(1,15) == 1:
+        elif random.randint(1,25) == 1:
             yellowman.state = 'walk'
             frame_count = 0
     elif yellowman.state == 'walk':
@@ -88,7 +88,11 @@ def update(frame_count, yellowman):
             frame = walkR[frame_count]
         else:
             frame = walkL[frame_count]
-        if random.randint(1,100) == 1:
+        if random.randint(1,500) == 1:
+            select_topic(yellowman)
+            yellowman.state = 'talk'
+            frame_count = 0
+        elif random.randint(1,100) == 1:
             yellowman.facing = 1-random.randint(0,1)*2
             yellowman.state = 'idle'
             frame_count = 0
