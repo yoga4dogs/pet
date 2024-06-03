@@ -6,12 +6,19 @@ image_path = '.\\images\\yellowman\\'
 sprite_size = 128
 frame_count = 0
 
-loop_interval = 125
+update_loop_time = 125
 
 user32 = ctypes.windll.user32
 screen_size = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
 taskbar_size = 48
 bottom_bounds = screen_size[1]-sprite_size-taskbar_size
+
+# set window transparency
+root = tk.Tk()
+root.config(highlightbackground='black')
+root.overrideredirect(True)
+root.wm_attributes('-transparentcolor','black')
+root.wm_attributes('-topmost', True)
 
 class new_yellowman:
     def __init__(self):
@@ -23,70 +30,44 @@ class new_yellowman:
     topic = 1
 yellowman = new_yellowman()
 
-# set window transparency
-root = tk.Tk()
-root.config(highlightbackground='black')
-root.overrideredirect(True)
-root.wm_attributes('-transparentcolor','black')
-root.wm_attributes('-topmost', True)
+def load_frames(action, file_name):
+    for i in range(4):
+        action.append(tk.PhotoImage(file=image_path+file_name,format = 'gif -index '+str(i)))
+def load_frames_talk(action, file_name, index):
+    action.append([])
+    for i in range(4):
+        action[index].append(tk.PhotoImage(file=image_path+file_name,format = 'gif -index '+str(i)))
 
 # idle
 idle = []
-idle.append(tk.PhotoImage(file=image_path+'idle.gif',format = 'gif -index 0'))
-idle.append(tk.PhotoImage(file=image_path+'idle.gif',format = 'gif -index 1'))
-idle.append(tk.PhotoImage(file=image_path+'idle.gif',format = 'gif -index 2'))
-idle.append(tk.PhotoImage(file=image_path+'idle.gif',format = 'gif -index 3'))
+load_frames(idle, 'idle.gif')
 # walk
 walkL = []
-walkL.append(tk.PhotoImage(file=image_path+'walkL.gif',format = 'gif -index 0'))
-walkL.append(tk.PhotoImage(file=image_path+'walkL.gif',format = 'gif -index 1'))
-walkL.append(tk.PhotoImage(file=image_path+'walkL.gif',format = 'gif -index 2'))
-walkL.append(tk.PhotoImage(file=image_path+'walkL.gif',format = 'gif -index 3'))
+load_frames(walkL, 'walkL.gif')
 walkR = []
-walkR.append(tk.PhotoImage(file=image_path+'walkR.gif',format = 'gif -index 0'))
-walkR.append(tk.PhotoImage(file=image_path+'walkR.gif',format = 'gif -index 1'))
-walkR.append(tk.PhotoImage(file=image_path+'walkR.gif',format = 'gif -index 2'))
-walkR.append(tk.PhotoImage(file=image_path+'walkR.gif',format = 'gif -index 3'))
+load_frames(walkR, 'walkR.gif')
 # flip
 fallL = []
-fallL.append(tk.PhotoImage(file=image_path+'fallL.gif',format = 'gif -index 0'))
-fallL.append(tk.PhotoImage(file=image_path+'fallL.gif',format = 'gif -index 1'))
-fallL.append(tk.PhotoImage(file=image_path+'fallL.gif',format = 'gif -index 2'))
-fallL.append(tk.PhotoImage(file=image_path+'fallL.gif',format = 'gif -index 3'))
+load_frames(fallL, 'fallL.gif')
 fallR = []
-fallR.append(tk.PhotoImage(file=image_path+'fallR.gif',format = 'gif -index 0'))
-fallR.append(tk.PhotoImage(file=image_path+'fallR.gif',format = 'gif -index 1'))
-fallR.append(tk.PhotoImage(file=image_path+'fallR.gif',format = 'gif -index 2'))
-fallR.append(tk.PhotoImage(file=image_path+'fallR.gif',format = 'gif -index 3'))
+load_frames(fallR, 'fallR.gif')
 # flip
 flipL = []
-flipL.append(tk.PhotoImage(file=image_path+'flipL.gif',format = 'gif -index 0'))
-flipL.append(tk.PhotoImage(file=image_path+'flipL.gif',format = 'gif -index 1'))
-flipL.append(tk.PhotoImage(file=image_path+'flipL.gif',format = 'gif -index 2'))
-flipL.append(tk.PhotoImage(file=image_path+'flipL.gif',format = 'gif -index 3'))
+load_frames(flipL, 'flipL.gif')
 flipR = []
-flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 0'))
-flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 1'))
-flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 2'))
-flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 3'))
+load_frames(flipR, 'flipR.gif')
 # talk
-talk = [[], [], [], []]
-talk[0].append(tk.PhotoImage(file=image_path+'talk_snake.gif',format = 'gif -index 0'))
-talk[0].append(tk.PhotoImage(file=image_path+'talk_snake.gif',format = 'gif -index 1'))
-talk[0].append(tk.PhotoImage(file=image_path+'talk_snake.gif',format = 'gif -index 2'))
-talk[0].append(tk.PhotoImage(file=image_path+'talk_snake.gif',format = 'gif -index 3'))
-talk[1].append(tk.PhotoImage(file=image_path+'talk_ghost.gif',format = 'gif -index 0'))
-talk[1].append(tk.PhotoImage(file=image_path+'talk_ghost.gif',format = 'gif -index 1'))
-talk[1].append(tk.PhotoImage(file=image_path+'talk_ghost.gif',format = 'gif -index 2'))
-talk[1].append(tk.PhotoImage(file=image_path+'talk_ghost.gif',format = 'gif -index 3'))
-talk[2].append(tk.PhotoImage(file=image_path+'talk_grape.gif',format = 'gif -index 0'))
-talk[2].append(tk.PhotoImage(file=image_path+'talk_grape.gif',format = 'gif -index 1'))
-talk[2].append(tk.PhotoImage(file=image_path+'talk_grape.gif',format = 'gif -index 2'))
-talk[2].append(tk.PhotoImage(file=image_path+'talk_grape.gif',format = 'gif -index 3'))
-talk[3].append(tk.PhotoImage(file=image_path+'talk_potential.gif',format = 'gif -index 0'))
-talk[3].append(tk.PhotoImage(file=image_path+'talk_potential.gif',format = 'gif -index 1'))
-talk[3].append(tk.PhotoImage(file=image_path+'talk_potential.gif',format = 'gif -index 2'))
-talk[3].append(tk.PhotoImage(file=image_path+'talk_potential.gif',format = 'gif -index 3'))
+talk = []
+load_frames_talk(talk, 'talk_snake.gif', 0)
+load_frames_talk(talk, 'talk_ghost.gif', 1)
+load_frames_talk(talk, 'talk_grape.gif', 2)
+load_frames_talk(talk, 'talk_potential.gif', 3)
+load_frames_talk(talk, 'talk_neighbor.gif', 4)
+load_frames_talk(talk, 'talk_revenge.gif', 5)
+load_frames_talk(talk, 'talk_odo.gif', 6)
+load_frames_talk(talk, 'talk_blue.gif', 7)
+load_frames_talk(talk, 'talk_marbles.gif', 8)
+load_frames_talk(talk, 'talk_laughing.gif', 9)
 
 def update(frame_count, yellowman):
     if frame_count < 3:
@@ -99,7 +80,7 @@ def update(frame_count, yellowman):
             select_topic(yellowman)
             yellowman.state = 'talk'
             frame_count = 0
-        elif random.randint(1,20) == 1:
+        elif random.randint(1,15) == 1:
             yellowman.state = 'walk'
             frame_count = 0
     elif yellowman.state == 'walk':
@@ -145,13 +126,12 @@ def update(frame_count, yellowman):
     elif yellowman.state == 'talk':
         frame = talk[yellowman.topic][frame_count]
 
-
     if yellowman.y > bottom_bounds:
         yellowman.y = bottom_bounds
 
     label.configure(image=frame)
     root.geometry('128x128+'+str(yellowman.x)+'+'+str(yellowman.y))
-    root.after(loop_interval,update, frame_count, yellowman)
+    root.after(update_loop_time,update, frame_count, yellowman)
 
 def move_x(yellowman):
     if yellowman.state == 'flip':
@@ -175,12 +155,13 @@ def click_handler(event):
     if yellowman.state == 'held':
         frame_count = 0
         yellowman.state = 'fall'
+    elif yellowman.state == 'idle':
+        yellowman.state = 'walk'
+    elif yellowman.state == 'walk':
+        yellowman.state = 'idle'
     elif yellowman.state == 'talk':
         frame_count = 0
         yellowman.state = 'idle'
-    else:
-        select_topic(yellowman)
-        yellowman.state = 'talk'
 
 def drag_handler(event):
     frame_count = 0
@@ -200,5 +181,5 @@ label.pack()
 label.bind("<B1-Motion>", drag_handler)
 label.bind("<ButtonRelease>", click_handler)
 
-root.after(loop_interval,update, frame_count, yellowman)
+root.after(update_loop_time,update, frame_count, yellowman)
 root.mainloop()
