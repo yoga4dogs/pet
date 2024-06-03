@@ -70,7 +70,7 @@ flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 1'))
 flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 2'))
 flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 3'))
 # talk
-talk = [[], []]
+talk = [[], [], [], []]
 talk[0].append(tk.PhotoImage(file=image_path+'talk_snake.gif',format = 'gif -index 0'))
 talk[0].append(tk.PhotoImage(file=image_path+'talk_snake.gif',format = 'gif -index 1'))
 talk[0].append(tk.PhotoImage(file=image_path+'talk_snake.gif',format = 'gif -index 2'))
@@ -79,6 +79,14 @@ talk[1].append(tk.PhotoImage(file=image_path+'talk_ghost.gif',format = 'gif -ind
 talk[1].append(tk.PhotoImage(file=image_path+'talk_ghost.gif',format = 'gif -index 1'))
 talk[1].append(tk.PhotoImage(file=image_path+'talk_ghost.gif',format = 'gif -index 2'))
 talk[1].append(tk.PhotoImage(file=image_path+'talk_ghost.gif',format = 'gif -index 3'))
+talk[2].append(tk.PhotoImage(file=image_path+'talk_grape.gif',format = 'gif -index 0'))
+talk[2].append(tk.PhotoImage(file=image_path+'talk_grape.gif',format = 'gif -index 1'))
+talk[2].append(tk.PhotoImage(file=image_path+'talk_grape.gif',format = 'gif -index 2'))
+talk[2].append(tk.PhotoImage(file=image_path+'talk_grape.gif',format = 'gif -index 3'))
+talk[3].append(tk.PhotoImage(file=image_path+'talk_potential.gif',format = 'gif -index 0'))
+talk[3].append(tk.PhotoImage(file=image_path+'talk_potential.gif',format = 'gif -index 1'))
+talk[3].append(tk.PhotoImage(file=image_path+'talk_potential.gif',format = 'gif -index 2'))
+talk[3].append(tk.PhotoImage(file=image_path+'talk_potential.gif',format = 'gif -index 3'))
 
 def update(frame_count, yellowman):
     if frame_count < 3:
