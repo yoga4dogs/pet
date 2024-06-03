@@ -20,6 +20,7 @@ class new_yellowman:
     facing = 1
     speed = 20
     y = bottom_bounds
+    topic = 1
 yellowman = new_yellowman()
 
 # set window transparency
@@ -68,6 +69,16 @@ flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 0'))
 flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 1'))
 flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 2'))
 flipR.append(tk.PhotoImage(file=image_path+'flipR.gif',format = 'gif -index 3'))
+# talk
+talk = [[], []]
+talk[0].append(tk.PhotoImage(file=image_path+'talk_snake.gif',format = 'gif -index 0'))
+talk[0].append(tk.PhotoImage(file=image_path+'talk_snake.gif',format = 'gif -index 1'))
+talk[0].append(tk.PhotoImage(file=image_path+'talk_snake.gif',format = 'gif -index 2'))
+talk[0].append(tk.PhotoImage(file=image_path+'talk_snake.gif',format = 'gif -index 3'))
+talk[1].append(tk.PhotoImage(file=image_path+'talk_ghost.gif',format = 'gif -index 0'))
+talk[1].append(tk.PhotoImage(file=image_path+'talk_ghost.gif',format = 'gif -index 1'))
+talk[1].append(tk.PhotoImage(file=image_path+'talk_ghost.gif',format = 'gif -index 2'))
+talk[1].append(tk.PhotoImage(file=image_path+'talk_ghost.gif',format = 'gif -index 3'))
 
 def update(frame_count, yellowman):
     if frame_count < 3:
@@ -76,7 +87,11 @@ def update(frame_count, yellowman):
         frame_count = 0
     if yellowman.state == 'idle':
         frame = idle[frame_count]
-        if random.randint(1,20) == 1:
+        if random.randint(1,500) == 1:
+            select_topic(yellowman)
+            yellowman.state = 'talk'
+            frame_count = 0
+        elif random.randint(1,20) == 1:
             yellowman.state = 'walk'
             frame_count = 0
     elif yellowman.state == 'walk':
@@ -119,6 +134,9 @@ def update(frame_count, yellowman):
             frame_count = 0
         else:
             yellowman.y += yellowman.speed * 2
+    elif yellowman.state == 'talk':
+        frame = talk[yellowman.topic][frame_count]
+
 
     if yellowman.y > bottom_bounds:
         yellowman.y = bottom_bounds
@@ -142,10 +160,19 @@ def move_x(yellowman):
         yellowman.x += yellowman.speed * speed_mod * yellowman.facing
     return yellowman
 
+def select_topic(yellowman):
+    yellowman.topic = random.randint(0,len(talk)-1)
+
 def click_handler(event):
     if yellowman.state == 'held':
         frame_count = 0
         yellowman.state = 'fall'
+    elif yellowman.state == 'talk':
+        frame_count = 0
+        yellowman.state = 'idle'
+    else:
+        select_topic(yellowman)
+        yellowman.state = 'talk'
 
 def drag_handler(event):
     frame_count = 0
