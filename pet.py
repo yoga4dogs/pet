@@ -82,7 +82,7 @@ def update(yellowman):
             select_topic(yellowman)
             yellowman.state = 'talk'
             yellowman.frame_counter = 0
-        elif random.randint(1,25) == 1:
+        elif random.randint(1,50) == 1:
             yellowman.facing = random.randint(0,1)
             yellowman.state = 'walk'
             yellowman.frame_counter = 0
@@ -95,7 +95,7 @@ def update(yellowman):
         elif random.randint(1,100) == 1:
             yellowman.state = 'idle'
             yellowman.frame_counter = 0
-        elif random.randint(1,50) == 1:
+        elif random.randint(1,200) == 1:
             yellowman.state = 'flip'
             yellowman.frame_counter = 0
         else:
@@ -165,7 +165,6 @@ def click_handler(event):
 
 def drag_handler(event):
     yellowman.state = 'held'
-    yellowman.frame_counter = 0
     if yellowman.x < int(root.winfo_pointerx()-sprite_size/2):
         yellowman.facing = 1
     else:
