@@ -2,6 +2,9 @@ import random
 import tkinter as tk
 import ctypes
 
+# set taskbar height/ground plane for yellowman
+taskbar_size = 48
+
 image_path = '.\\images\\yellowman\\'
 sprite_size = 128
 frame_count = 0
@@ -10,7 +13,6 @@ update_loop_time = 125
 
 user32 = ctypes.windll.user32
 screen_size = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
-taskbar_size = 48
 bottom_bounds = screen_size[1]-sprite_size-taskbar_size
 
 # set window transparency
