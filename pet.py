@@ -110,7 +110,10 @@ def update(yellowman):
         frame = fall[yellowman.facing][yellowman.frame_counter]
         pass
     elif yellowman.state == 'fall':
-        frame = flip[yellowman.facing][yellowman.frame_counter]
+        if yellowman.y < bottom_bounds-sprite_size:
+            frame = flip[yellowman.facing][yellowman.frame_counter]
+        else:
+            frame = fall[yellowman.facing][yellowman.frame_counter]
         if yellowman.y + yellowman.speed * 2 > bottom_bounds:
             yellowman.y = bottom_bounds
             yellowman.state = 'idle'
