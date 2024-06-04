@@ -3,11 +3,11 @@ import tkinter as tk
 import ctypes
 
 # set taskbar height/ground plane for yellowman
-taskbar_size = 48
+taskbar_size = 40
 
 image_path = '.\\images\\yellowman\\'
 sprite_size = 128
-frame_count = 0
+anim_frame_length = 4
 
 update_loop_time = 125
 
@@ -30,128 +30,120 @@ class new_yellowman:
     speed = 20
     y = bottom_bounds
     topic = 1
+    frame_counter = 0
 yellowman = new_yellowman()
 
-def load_frames(action, file_name):
-    for i in range(4):
-        action.append(tk.PhotoImage(file=image_path+file_name,format = 'gif -index '+str(i)))
-def load_frames_talk(action, file_name, index):
-    action.append([])
-    for i in range(4):
-        action[index].append(tk.PhotoImage(file=image_path+file_name,format = 'gif -index '+str(i)))
+def load_frames(action, file_name, nested):
+    if nested:
+        action.append([])
+        index = len(action) - 1
+        for i in range(anim_frame_length):
+            action[index].append(tk.PhotoImage(file=image_path+file_name,format = 'gif -index '+str(i)))
+    else:
+        for i in range(anim_frame_length):
+            action.append(tk.PhotoImage(file=image_path+file_name,format = 'gif -index '+str(i)))
 
 # idle
 idle = []
-load_frames(idle, 'idle.gif')
+load_frames(idle, 'idle.gif', False)
 # walk
-walkL = []
-load_frames(walkL, 'walkL.gif')
-walkR = []
-load_frames(walkR, 'walkR.gif')
+walk = [[], []]
+load_frames(walk[0], 'walkL.gif', False)
+load_frames(walk[1], 'walkR.gif', False)
 # flip
-fallL = []
-load_frames(fallL, 'fallL.gif')
-fallR = []
-load_frames(fallR, 'fallR.gif')
+fall = [[], []]
+load_frames(fall[0], 'fallL.gif', False)
+load_frames(fall[1], 'fallR.gif', False)
 # flip
-flipL = []
-load_frames(flipL, 'flipL.gif')
-flipR = []
-load_frames(flipR, 'flipR.gif')
+flip = [[], []]
+load_frames(flip[0], 'flipL.gif', False)
+load_frames(flip[1], 'flipR.gif', False)
 # talk
 talk = []
-load_frames_talk(talk, 'talk_snake.gif', 0)
-load_frames_talk(talk, 'talk_ghost.gif', 1)
-load_frames_talk(talk, 'talk_grape.gif', 2)
-load_frames_talk(talk, 'talk_potential.gif', 3)
-load_frames_talk(talk, 'talk_neighbor.gif', 4)
-load_frames_talk(talk, 'talk_revenge.gif', 5)
-load_frames_talk(talk, 'talk_odo.gif', 6)
-load_frames_talk(talk, 'talk_blue.gif', 7)
-load_frames_talk(talk, 'talk_marbles.gif', 8)
-load_frames_talk(talk, 'talk_laughing.gif', 9)
+load_frames(talk, 'talk_snake.gif', True)
+load_frames(talk, 'talk_ghost.gif', True)
+load_frames(talk, 'talk_grape.gif', True)
+load_frames(talk, 'talk_potential.gif', True)
+load_frames(talk, 'talk_neighbor.gif', True)
+load_frames(talk, 'talk_revenge.gif', True)
+load_frames(talk, 'talk_odo.gif', True)
+load_frames(talk, 'talk_blue.gif', True)
+load_frames(talk, 'talk_marbles.gif', True)
+load_frames(talk, 'talk_laughing.gif', True)
 
-def update(frame_count, yellowman):
-    if frame_count < 3:
-        frame_count += 1
+def update(yellowman):
+    if yellowman.frame_counter < anim_frame_length - 1:
+        yellowman.frame_counter += 1
     else:
-        frame_count = 0
+        yellowman.frame_counter = 0
     if yellowman.state == 'idle':
-        frame = idle[frame_count]
+        frame = idle[yellowman.frame_counter]
         if random.randint(1,1000) == 1:
             select_topic(yellowman)
             yellowman.state = 'talk'
-            frame_count = 0
+            yellowman.frame_counter = 0
         elif random.randint(1,25) == 1:
+            yellowman.facing = random.randint(0,1)
             yellowman.state = 'walk'
-            frame_count = 0
+            yellowman.frame_counter = 0
     elif yellowman.state == 'walk':
-        if yellowman.facing > 0:
-            frame = walkR[frame_count]
-        else:
-            frame = walkL[frame_count]
+        frame = walk[yellowman.facing][yellowman.frame_counter]
         if random.randint(1,1000) == 1:
             select_topic(yellowman)
             yellowman.state = 'talk'
-            frame_count = 0
+            yellowman.frame_counter = 0
         elif random.randint(1,100) == 1:
-            yellowman.facing = 1-random.randint(0,1)*2
             yellowman.state = 'idle'
-            frame_count = 0
+            yellowman.frame_counter = 0
         elif random.randint(1,50) == 1:
             yellowman.state = 'flip'
-            frame_count = 0
+            yellowman.frame_counter = 0
         else:
             yellowman = move_x(yellowman)
     elif yellowman.state == 'flip':
-        if yellowman.facing > 0:
-            frame = flipR[frame_count]
-        else:
-            frame = flipL[frame_count]
+        frame = flip[yellowman.facing][yellowman.frame_counter]
         yellowman = move_x(yellowman)
-        if frame_count == 3:
+        if yellowman.frame_counter == 3:
             yellowman.state = 'walk'
-            frame_count = 0
+            yellowman.frame_counter = 0
     elif yellowman.state == 'held':
-        if yellowman.facing > 0:
-            frame = fallR[frame_count]
-        else:
-            frame = fallL[frame_count]
+        frame = fall[yellowman.facing][yellowman.frame_counter]
         pass
     elif yellowman.state == 'fall':
-        if yellowman.facing > 0:
-            frame = flipR[frame_count]
-        else:
-            frame = flipL[frame_count]
+        frame = flip[yellowman.facing][yellowman.frame_counter]
         if yellowman.y + yellowman.speed * 2 > bottom_bounds:
             yellowman.y = bottom_bounds
             yellowman.state = 'idle'
-            frame_count = 0
+            yellowman.frame_counter = 0
         else:
             yellowman.y += yellowman.speed * 2
     elif yellowman.state == 'talk':
-        frame = talk[yellowman.topic][frame_count]
+        frame = talk[yellowman.topic][yellowman.frame_counter]
 
     if yellowman.y > bottom_bounds:
         yellowman.y = bottom_bounds
 
     label.configure(image=frame)
     root.geometry('128x128+'+str(yellowman.x)+'+'+str(yellowman.y))
-    root.after(update_loop_time,update, frame_count, yellowman)
+    root.after(update_loop_time,update, yellowman)
 
 def move_x(yellowman):
     if yellowman.state == 'flip':
         speed_mod = 4
     else:
         speed_mod = 1
-    if yellowman.x + (yellowman.speed * yellowman.facing) > screen_size[0]-sprite_size:
-        yellowman.x = screen_size[0]-sprite_size
-        yellowman.facing *= -1
-    elif yellowman.x + (yellowman.speed * yellowman.facing) < 0:
-        yellowman.x = 0
-        yellowman.facing *= -1
+    if yellowman.facing == 1:
+        dir = 1
     else:
-        yellowman.x += yellowman.speed * speed_mod * yellowman.facing
+        dir = -1
+    if yellowman.x + (yellowman.speed * speed_mod * dir) > screen_size[0]-sprite_size:
+        yellowman.x = screen_size[0]-sprite_size
+        yellowman.facing = 1 - yellowman.facing
+    elif yellowman.x + (yellowman.speed * speed_mod * dir) < 0:
+        yellowman.x = 0
+        yellowman.facing = 1 - yellowman.facing
+    else:
+        yellowman.x += yellowman.speed * speed_mod * dir
     return yellowman
 
 def select_topic(yellowman):
@@ -159,23 +151,25 @@ def select_topic(yellowman):
 
 def click_handler(event):
     if yellowman.state == 'held':
-        frame_count = 0
         yellowman.state = 'fall'
+        yellowman.frame_counter = 0
     elif yellowman.state == 'idle':
         yellowman.state = 'walk'
+        yellowman.frame_counter = 0
     elif yellowman.state == 'walk':
         yellowman.state = 'idle'
+        yellowman.frame_counter = 0
     elif yellowman.state == 'talk':
-        frame_count = 0
         yellowman.state = 'idle'
+        yellowman.frame_counter = 0
 
 def drag_handler(event):
-    frame_count = 0
     yellowman.state = 'held'
+    yellowman.frame_counter = 0
     if yellowman.x < int(root.winfo_pointerx()-sprite_size/2):
         yellowman.facing = 1
     else:
-        yellowman.facing = -1
+        yellowman.facing = 0
     yellowman.x = int(root.winfo_pointerx()-sprite_size/2)
     yellowman.y = int(root.winfo_pointery()-sprite_size/4)
 
@@ -187,5 +181,5 @@ label.pack()
 label.bind("<B1-Motion>", drag_handler)
 label.bind("<ButtonRelease>", click_handler)
 
-root.after(update_loop_time,update, frame_count, yellowman)
+root.after(update_loop_time,update, yellowman)
 root.mainloop()
